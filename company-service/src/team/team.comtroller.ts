@@ -1,8 +1,9 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Res, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Req, Res, UsePipes, ValidationPipe } from "@nestjs/common";
 import { CreateTeam } from "./dto/team.dto";
 import { Team } from "./team.schema";
 import { TeamService } from "./team.service";
 import { AuthMiddleware } from "src/middlewares/auth.middleware";
+import AuthRequest from "src/interfaces/authRequest";
 
 @Controller('team')
 export class TeamController {
@@ -10,7 +11,9 @@ export class TeamController {
     
     @Post()
     @UsePipes(ValidationPipe)
-    async createTeam(@Res() response, @Body() team: CreateTeam, @Param() params) {
+    async createTeam(@Res() response, @Body() team: CreateTeam, @Param() params, @Req() req: AuthRequest) {
+        if(!req.auth) return response.status(HttpStatus.UNAUTHORIZED).json()
+        console.log(req.jwtPayload, 'further check the scopes are valid or not')
         try{            
             const newTeam = await this.teamService.createTeam(team);            
             return response.status(HttpStatus.CREATED).json({
@@ -24,7 +27,9 @@ export class TeamController {
     }
 
     @Get()
-    async fetchAll(@Res() response) {
+    async fetchAll(@Res() response, @Req() req: AuthRequest) {
+        if(!req.auth) return response.status(HttpStatus.UNAUTHORIZED).json()
+        console.log(req.jwtPayload, 'further check the scopes are valid or not')
         const teams = await this.teamService.readAll();
         return response.status(HttpStatus.OK).json({
             teams
