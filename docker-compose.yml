@@ -1,0 +1,33 @@
+version: '3.2'
+networks:
+  default:
+    external:
+      name: techwondoe
+services:
+  auth-service:
+    image: node:12-alpine
+    working_dir: /auth-service
+    command: npm run start:dev
+    # env_file: ./auth-service/.env
+    volumes:
+      - type: bind
+        source: ./auth-service
+        target: /auth-service
+    ports:
+      - 4000:4000
+
+  company-service:
+    image: node:12-alpine
+    working_dir: /api
+    command: npm run start:dev
+    # env_file: ./company-service/.env
+    volumes:
+      - type: bind
+        source: ./company-service
+        target: /api
+    ports:
+      - 3000:3000
+  mongo:
+    image: mongo
+    ports:
+      - 27071:27017
