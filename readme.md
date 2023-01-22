@@ -1,5 +1,7 @@
 To Run
 
+Install Docker and docker-compose
+
 # docker-compose up
 
 Services - auth and company service
