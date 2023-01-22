@@ -2,6 +2,9 @@ To Run
 
 Install Docker and docker-compose
 
+
+# docker-compose run auth-service npm i
+# docker-compose run company-service npm i
 # docker-compose up
 
 Services - auth and company service
